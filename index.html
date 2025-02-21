@@ -57,21 +57,21 @@
 <body>
   <h1>Fuel Converter</h1>
   
-  <h2>From lb to liters</h2>
-  <label for="pounds">Quantity in pounds:</label>
+  <h2>From lb to L</h2>
+  <label for="pounds">Quantity in lb:</label>
   <input type="text" id="pounds" inputmode="decimal" placeholder="Enter quantity in lb" onkeydown="moveToNext(event, 'density')">
 
   <label for="density">Daily density (kg/L):</label>
   <input type="text" id="density" inputmode="decimal" placeholder="Enter density (e.g., 0.8 or 0,8)" onkeydown="moveToNext(event, 'convertBtn')">
 
-  <button id="convertBtn">Convert to Liters</button>
+  <button id="convertBtn">Convert to L</button>
 
   <div id="result"></div>
 
   <hr>
 
   <h2>From Liters to lb</h2>
-  <label for="liters">Quantity in liters:</label>
+  <label for="liters">Quantity in L:</label>
   <input type="text" id="liters" inputmode="decimal" placeholder="Enter quantity in liters" onkeydown="moveToNext(event, 'densityInverse')">
 
   <label for="densityInverse">Daily density (kg/L):</label>
@@ -126,7 +126,7 @@
       const kilograms = pounds * 0.453592;
       const liters = kilograms / density;
 
-      resultDiv.innerText = `${pounds} lb = ${liters.toFixed(2)} l.`;
+      resultDiv.innerText = `${pounds} lb = ${liters.toFixed(2)} L.`;
     }
 
     function convertInverse() {
@@ -142,7 +142,7 @@
       const kilograms = liters * density;
       const pounds = kilograms / 0.453592;
 
-      resultDiv.innerText = `${liters} l = ${pounds.toFixed(2)} lb.`;
+      resultDiv.innerText = `${liters} L = ${pounds.toFixed(2)} lb.`;
     }
 
     function calculateUplift() {
@@ -160,7 +160,7 @@
       const upliftKilograms = upliftPounds * 0.453592;
       const upliftLiters = upliftKilograms / density;
 
-      resultDiv.innerText = `Uplift = ${upliftLiters.toFixed(2)} l.`;
+      resultDiv.innerText = `Uplift = ${upliftLiters.toFixed(2)} L.`;
     }
   </script>
 </body>
