@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuel Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    input {
+      -moz-appearance: textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    button {
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result, #resultInverse, #resultUplift {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      body {
+        margin: 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Fuel Converter</h1>
+  
+  <h2>From lb to l</h2>
+  <label for="pounds">Quantity in pounds:</label>
+  <input type="text" id="pounds" inputmode="decimal" placeholder="Enter quantity in lb" onkeydown="moveToNext(event, 'density')">
+
+  <label for="density">Daily density (kg/L):</label>
+  <input type="text" id="density" inputmode="decimal" placeholder="Enter density (e.g., 0.8 or 0,8)" onkeydown="moveToNext(event, 'convertBtn')">
+
+  <button id="convertBtn">Convert to Liters</button>
+
+  <div id="result"></div>
+
+  <hr>
+
+  <h2>From Liters to lb</h2>
+  <label for="liters">Quantity in liters:</label>
+  <input type="text" id="liters" inputmode="decimal" placeholder="Enter quantity in liters" onkeydown="moveToNext(event, 'densityInverse')">
+
+  <label for="densityInverse">Daily density (kg/L):</label>
+  <input type="text" id="densityInverse" inputmode="decimal" placeholder="Enter density (e.g., 0.8 or 0,8)" onkeydown="moveToNext(event, 'convertInverseBtn')">
+
+  <button id="convertInverseBtn">Convert to lb</button>
+
+  <div id="resultInverse"></div>
+
+  <hr>
+
+  <h2>Uplift</h2>
+  <label for="remaining">Remaining Quantity (lb):</label>
+  <input type="text" id="remaining" inputmode="decimal" placeholder="Enter remaining quantity in lb" onkeydown="moveToNext(event, 'final')">
+
+  <label for="final">Final Quantity (lb):</label>
+  <input type="text" id="final" inputmode="decimal" placeholder="Enter final quantity in lb" onkeydown="moveToNext(event, 'densityUplift')">
+
+  <label for="densityUplift">Daily density (kg/L):</label>
+  <input type="text" id="densityUplift" inputmode="decimal" placeholder="Enter density (e.g., 0.8 or 0,8)" onkeydown="moveToNext(event, 'upliftBtn')">
+
+  <button id="upliftBtn">Calculate Uplift in Liters</button>
+
+  <div id="resultUplift"></div>
+
+  <script>
+    document.getElementById('convertBtn').addEventListener('click', convert);
+    document.getElementById('convertInverseBtn').addEventListener('click', convertInverse);
+    document.getElementById('upliftBtn').addEventListener('click', calculateUplift);
+
+    function moveToNext(event, nextId) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.getElementById(nextId).focus();
+      }
+    }
+
+    function parseInput(value) {
+      return parseFloat(value.replace(',', '.'));
+    }
+
+    function convert() {
+      const pounds = parseInput(document.getElementById('pounds').value);
+      const density = parseInput(document.getElementById('density').value);
+      const resultDiv = document.getElementById('result');
+
+      if (isNaN(pounds) || isNaN(density) || density <= 0) {
+        resultDiv.innerText = "Please enter valid values (numbers only, density > 0).";
+        return;
+      }
+
+      const kilograms = pounds * 0.453592;
+      const liters = kilograms / density;
+
+      resultDiv.innerText = `${pounds} lb = ${liters.toFixed(2)} l.`;
+    }
+
+    function convertInverse() {
+      const liters = parseInput(document.getElementById('liters').value);
+      const density = parseInput(document.getElementById('densityInverse').value);
+      const resultDiv = document.getElementById('resultInverse');
+
+      if (isNaN(liters) || isNaN(density) || density <= 0) {
+        resultDiv.innerText = "Please enter valid values (numbers only, density > 0).";
+        return;
+      }
+
+      const kilograms = liters * density;
+      const pounds = kilograms / 0.453592;
+
+      resultDiv.innerText = `${liters} l = ${pounds.toFixed(2)} lb.`;
+    }
+
+    function calculateUplift() {
+      const remaining = parseInput(document.getElementById('remaining').value);
+      const final = parseInput(document.getElementById('final').value);
+      const density = parseInput(document.getElementById('densityUplift').value);
+      const resultDiv = document.getElementById('resultUplift');
+
+      if (isNaN(remaining) || isNaN(final) || isNaN(density) || density <= 0 || final <= remaining) {
+        resultDiv.innerText = "Please enter valid values (final > remaining, density > 0).";
+        return;
+      }
+
+      const upliftPounds = final - remaining;
+      const upliftKilograms = upliftPounds * 0.453592;
+      const upliftLiters = upliftKilograms / density;
+
+      resultDiv.innerText = `Uplift = ${upliftLiters.toFixed(2)} l.`;
+    }
+  </script>
+</body>
+</html>
